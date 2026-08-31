@@ -29,12 +29,17 @@ async def rate_limit_ip(request : Request, call_next):
 
     if len(ips_historic[client_ip]) >= req_limit:
         return JSONResponse(
-            status_code=429,
-            content={
-                "succeso" : False,
-                "mensagem" : "Rate Limit excedido"
-            }
-        )
+    status_code=429,
+    content={
+        "sucesso": False,
+        "mensagem": "Rate Limit excedido"
+        },
+        headers={
+            "Access-Control-Allow-Origin": "http://127.0.0.1:5500",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "*"
+        }
+)
     ips_historic[client_ip].append(now)
     
     response = await call_next(request)
