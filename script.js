@@ -5,7 +5,7 @@ function login() {
     .then(async response => {
         if (response.status === 429) {
             const data = await response.json().catch(() => ({}));
-            alert(data.detail || "Rate limit excedido");
+            window.location.href = "429.html"
             return;
         }
 

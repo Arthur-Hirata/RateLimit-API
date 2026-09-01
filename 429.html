@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Você fez muitas requisições. Aguarde antes de tentar novamente.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.css" integrity="sha512-x9WwyMYBnlXMNQ6kQ/Lyzu1NqIhLQKL5Oq6xByfXuRj7s9CskyCbLv/1IjqzJmXwFXWr0ov6jBV7Qbc0hh9nHg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="style.css">
+    <title>429 - Muitas Requisições</title>
+</head>
+<body class="error-page">
+    <main class="error-container" aria-label="Página de erro 429">
+        <div class="error-content">
+            <div class="error-icon">
+                <i class="fas fa-hourglass-end"></i>
+            </div>
+
+            <h1 class="error-code">429</h1>
+            <h2 class="error-title">Muitas Requisições</h2>
+            
+            <p class="error-description">
+                Você excedeu o limite de requisições. Por favor, aguarde antes de tentar novamente.
+            </p>
+
+            <div class="retry-info">
+                <p class="retry-text">Tente novamente em:</p>
+                <div class="countdown" id="countdown">
+                    <span class="countdown-number" id="seconds">60</span>
+                    <span class="countdown-text">segundos</span>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <button class="btn-retry" id="retryBtn" onclick="retryLogin()" disabled>
+                <i class="fas fa-redo"></i> Tentar Novamente
+            </button>
+
+            <a href="/" class="btn-home">
+                <i class="fas fa-home"></i> Voltar ao Início
+            </a>
+        </div>
+
+        <div class="error-decoration">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+            <div class="circle circle-3"></div>
+        </div>
+    </main>
+
+    <script>
+        let remainingSeconds = 60;
+
+        function updateCountdown() {
+            const seconds = Math.max(0, remainingSeconds);
+            document.getElementById('seconds').textContent = seconds;
+            document.getElementById('progress').style.width = ((60 - seconds) / 60 * 100) + '%';
+
+            if (seconds <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('retryBtn').disabled = false;
+                document.getElementById('retryBtn').classList.add('enabled');
+            }
+            
+            remainingSeconds--;
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        function retryLogin() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
