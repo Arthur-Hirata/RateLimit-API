@@ -34,13 +34,20 @@ async def rate_limit_ip(request : Request, call_next):
 
     limit_time = now - timedelta(seconds=time_skip)
     ips_historic[client_ip] = [t for t in ips_historic[client_ip] if t > limit_time]
+    
 
     if len(ips_historic[client_ip]) >= req_limit:
+        oldest_request = ips_historic[client_ip][0]
+        wait_time = max(
+        0,
+        int((oldest_request + timedelta(seconds=time_skip) - now).total_seconds())
+        )
         return JSONResponse(
     status_code=429,
     content={
         "sucesso": False,
-        "mensagem": "Rate Limit excedido"
+        "mensagem": "Rate Limit excedido",
+        "wait_time" : wait_time
         },
         headers={
             "Access-Control-Allow-Origin": "http://127.0.0.1:5500",

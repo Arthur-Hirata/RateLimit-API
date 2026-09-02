@@ -5,6 +5,8 @@ function login() {
     .then(async response => {
         if (response.status === 429) {
             const data = await response.json().catch(() => ({}));
+            localStorage.setItem("waitTime", data.wait_time)
+            console.log(data.wait_time)
             window.location.href = "429.html"
             return;
         }

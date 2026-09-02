@@ -54,7 +54,8 @@
     </main>
 
     <script>
-        let remainingSeconds = 60;
+        let remainingSeconds = Number(localStorage.getItem("waitTime"));
+
 
         function updateCountdown() {
             const seconds = Math.max(0, remainingSeconds);
