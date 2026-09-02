@@ -60,14 +60,26 @@ async def rate_limit_ip(request : Request, call_next):
     response = await call_next(request)
     return response
 
+login_req_count = 0
 @app.get("/login", openapi_extra={"req_limit" : 5, "time_skip" : 60})
 def LoginUser():
+    global login_req_count 
+    login_req_count +=1
     return {"mensagem" : "teste"}
 
 
 num = 0
+num_req_count = 0
 @app.get("/increaseCount", openapi_extra={"req_limit" : 60, "time_skip": 120})
 def increaseCount():
     global num
+    global num_req_count
+    num_req_count +=1
     num += 1
     return {"num" : num}
+
+
+@app.get("/showsRequests", openapi_extra={"req_limit": 10, "time_skip": 30})
+def mostrarRequests():
+    req_list ={"Requisições Login" : login_req_count, "Requisições Contagem": num_req_count}
+    return {"req_list" : req_list}
