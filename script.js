@@ -1,3 +1,35 @@
+window.onload = function(){
+    getReqList()
+}
+function getReqList(){
+    fetch("http://127.0.0.1:8000/showsRequests", {
+        method : 'GET'
+    })
+    .then(async response =>{
+        if (response.status === 429){
+            const data = await response.json().catch(() => ({}));
+            localStorage.setItem("waitTime", data.wait_time)
+            console.log(data.wait_time)
+            window.location.href = "429.html"
+            return;
+        }
+        if (!response.ok){
+            alert("Erro no CORS")
+        }
+        const data = await response.json()
+        const reqTable = document.getElementById("Req-table")
+        data.req_list.forEach(req =>{
+            const tr = document.createElement("tr")
+        })
+
+
+    })
+}
+
+
+
+
+
 function login() {
     fetch("http://127.0.0.1:8000/login", {
         method: "GET"
