@@ -79,7 +79,16 @@ def increaseCount():
     return {"num" : num}
 
 
-@app.get("/showsRequests", openapi_extra={"req_limit": 10, "time_skip": 30})
+@app.get("/showsRequests", openapi_extra={"req_limit": 120, "time_skip": 30})
 def mostrarRequests():
-    req_list ={"Requisições Login" : login_req_count, "Requisições Contagem": num_req_count}
-    return {"req_list" : req_list}
+    req_List = [
+        {
+            "origem" : "Requisições Login",
+            "quantidade" : login_req_count
+        },
+        {
+            "origem" : "Requisições Contagem",
+            "quantidade" : num_req_count
+        }
+    ]
+    return {"req_list" : req_List}

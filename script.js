@@ -18,8 +18,15 @@ function getReqList(){
         }
         const data = await response.json()
         const reqTable = document.getElementById("Req-table")
-        data.req_list.forEach(req =>{
+        console.log(data)
+        const reqList = data.req_list
+        reqList.forEach(req =>{
             const tr = document.createElement("tr")
+            tr.innerHTML = `
+                <td>${req.origem}</td>
+                <td>${req.quantidade}</td>
+            `
+            reqTable.appendChild(tr)
         })
 
 
