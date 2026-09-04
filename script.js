@@ -17,16 +17,16 @@ function getReqList(){
             alert("Erro no CORS")
         }
         const data = await response.json()
-        const reqTable = document.getElementById("Req-table")
+        const reqTableactions = document.getElementById("Req-table")
         console.log(data)
-        const reqList = data.req_list
-        reqList.forEach(req =>{
+        const reqListActions = data.req_list
+        reqListActions.forEach(req =>{
             const tr = document.createElement("tr")
             tr.innerHTML = `
                 <td>${req.origem}</td>
                 <td>${req.quantidade}</td>
             `
-            reqTable.appendChild(tr)
+            reqTableactions.appendChild(tr)
         })
 
 
@@ -38,6 +38,7 @@ function getReqList(){
 
 
 function login() {
+    getReqList();
     fetch("http://127.0.0.1:8000/login", {
         method: "GET"
     })

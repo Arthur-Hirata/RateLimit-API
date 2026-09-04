@@ -14,6 +14,10 @@ app.add_middleware(
     allow_headers=["*"],             
 )
 ips_historic ={}
+IP_req_count = [
+    "Ip",
+    "quantidade"
+]
 @app.middleware("http")
 async def rate_limit_ip(request : Request, call_next):
     client_ip = request.client.host

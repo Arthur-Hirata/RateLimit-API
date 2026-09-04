@@ -21,7 +21,7 @@
 
             <label for="password">Senha</label>
             <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
-            <button class="btn-eye"><i class="fas fa-eye"></i></button>
+            <button class="btn-eye" type="button"><i class="fas fa-eye"></i></button>
             <button type="button" class="entrar" onclick="login()">Entrar</button>
         </form>
 
@@ -49,13 +49,30 @@
                 <th>Requisições</th>
             </tr>
             <tbody id="Req-table">
-
-
             </tbody>
         </table>
     </div>
 </section>
-  
+<section class="requests-table">
+<div class="table-header">
+        <div>
+            <span class="table-label">Monitoramento</span>
+            <h2>Requisições por IP</h2>
+        </div>
+        <span class="table-status">Atualizado agora</span>
+    </div>
+
+    <div class="table-wrapper">
+        <table>
+            <tr >
+                <th>IP</th>  
+                <th>Requisições</th>
+            </tr>
+            <tbody id="Req-table-IP">
+            </tbody>
+        </table>
+    </div>
+</section>
 </body>
 <script src="script.js"></script>
 </html>
