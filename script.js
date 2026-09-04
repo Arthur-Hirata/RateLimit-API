@@ -29,6 +29,18 @@ function getReqList(){
             reqTableactions.appendChild(tr)
         })
 
+        const callByIp = data.IP_req
+        const reqTableIp = document.getElementById("Req-table-IP")
+        callByIp.forEach(ip =>{
+            const tr = document.createElement("tr")
+            tr.innerHTML = `
+                <td>${ip.IP}</td>
+                <td>${ip.quantidade}</td>
+            
+            `
+            reqTableIp.appendChild(tr)
+        })
+
 
     })
 }

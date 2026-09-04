@@ -14,10 +14,16 @@ app.add_middleware(
     allow_headers=["*"],             
 )
 ips_historic ={}
-IP_req_count = [
-    "Ip",
-    "quantidade"
-]
+
+calls_by_IP =[]
+
+
+
+
+
+
+
+
 @app.middleware("http")
 async def rate_limit_ip(request : Request, call_next):
     client_ip = request.client.host
@@ -66,7 +72,28 @@ async def rate_limit_ip(request : Request, call_next):
 
 login_req_count = 0
 @app.get("/login", openapi_extra={"req_limit" : 5, "time_skip" : 60})
-def LoginUser():
+def LoginUser(request : Request):
+    global calls_by_IP
+    if calls_by_IP is None:
+        calls_by_IP=[]
+    ip_atual = request.client.host
+    encontrado = False
+
+    for item in calls_by_IP:
+        if item['IP'] == ip_atual:
+            item['quantidade'] +=1
+            encontrado = True
+            break
+
+    if not encontrado:
+        calls_by_IP.append({
+            'IP': ip_atual,
+            'quantidade' : 1
+        })
+
+
+
+
     global login_req_count 
     login_req_count +=1
     return {"mensagem" : "teste"}
@@ -75,7 +102,25 @@ def LoginUser():
 num = 0
 num_req_count = 0
 @app.get("/increaseCount", openapi_extra={"req_limit" : 60, "time_skip": 120})
-def increaseCount():
+def increaseCount(request: Request):
+    global calls_by_IP
+    if calls_by_IP is None:
+            calls_by_IP=[]
+    ip_atual = request.client.host
+    encontrado = False
+    
+    for item in calls_by_IP:
+        if item['IP'] == ip_atual:
+            item['quantidade'] +=1
+            encontrado = True
+            break
+    
+    if not encontrado:
+        calls_by_IP.append({
+            'IP': ip_atual,
+            'quantidade' : 1
+        })
+        
     global num
     global num_req_count
     num_req_count +=1
@@ -95,4 +140,4 @@ def mostrarRequests():
             "quantidade" : num_req_count
         }
     ]
-    return {"req_list" : req_List}
+    return {"req_list" : req_List, "IP_req" : calls_by_IP}
