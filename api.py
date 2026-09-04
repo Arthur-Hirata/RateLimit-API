@@ -38,16 +38,20 @@ async def rate_limit_ip(request : Request, call_next):
             time_skip = extra_dic.get("time_skip", 60)
 
     now = datetime.now()
+    chave = (client_ip, request.url.path)
 
-    if client_ip not in ips_historic:
-        ips_historic[client_ip] = []
+    if chave not in ips_historic:
+        ips_historic[chave] = []
 
     limit_time = now - timedelta(seconds=time_skip)
-    ips_historic[client_ip] = [t for t in ips_historic[client_ip] if t > limit_time]
+    ips_historic[chave] = [
+        t for t in ips_historic[chave]
+        if t > limit_time
+    ]
     
 
-    if len(ips_historic[client_ip]) >= req_limit:
-        oldest_request = ips_historic[client_ip][0]
+    if len(ips_historic[chave]) >= req_limit:
+        oldest_request = ips_historic[chave][0]
         wait_time = max(
         0,
         int((oldest_request + timedelta(seconds=time_skip) - now).total_seconds())
@@ -65,8 +69,7 @@ async def rate_limit_ip(request : Request, call_next):
             "Access-Control-Allow-Headers": "*"
         }
 )
-    ips_historic[client_ip].append(now)
-    
+    ips_historic[chave].append(now)
     response = await call_next(request)
     return response
 
@@ -101,7 +104,7 @@ def LoginUser(request : Request):
 
 num = 0
 num_req_count = 0
-@app.get("/increaseCount", openapi_extra={"req_limit" : 60, "time_skip": 120})
+@app.get("/increaseCount", openapi_extra={"req_limit" : 5, "time_skip": 120})
 def increaseCount(request: Request):
     global calls_by_IP
     if calls_by_IP is None:
@@ -128,7 +131,7 @@ def increaseCount(request: Request):
     return {"num" : num}
 
 
-@app.get("/showsRequests", openapi_extra={"req_limit": 120, "time_skip": 30})
+@app.get("/showsRequests", openapi_extra={"req_limit": 5, "time_skip": 30})
 def mostrarRequests():
     req_List = [
         {
