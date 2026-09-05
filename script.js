@@ -92,7 +92,7 @@ function secondRoute(){
         contagem.textContent = data.num
     })
 }
-function thirdRoute(){
+function ThirdRoute(){
     fetch("http://127.0.0.1:8000/increaseCount2", {
         method : 'GET'
     })

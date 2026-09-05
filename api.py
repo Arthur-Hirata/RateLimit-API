@@ -131,6 +131,33 @@ def increaseCount(request: Request):
     return {"num" : num}
 
 
+num2 = 0
+num2_req_count = 0
+@app.get("/increaseCount2", openapi_extra={"req_limit": 60, "time_skip": 120})
+def increaseCount2(request: Request):
+    global calls_by_IP
+    if calls_by_IP is None:
+        calls_by_IP = []
+    encontrado = False
+    for item in calls_by_IP:
+        if item['IP'] == request.client.host:
+            item['quantidade'] += 1
+            encontrado = True
+            break
+
+    if not encontrado:
+        calls_by_IP.append({
+            'IP': request.client.host,
+            'quantidade' : 1
+        })
+    global num2
+    global num2_req_count
+    num2_req_count +=1
+    num2+=1
+    return {"num": num2}
+        
+
+
 @app.get("/showsRequests", openapi_extra={"req_limit": 5, "time_skip": 30})
 def mostrarRequests():
     req_List = [
@@ -141,6 +168,10 @@ def mostrarRequests():
         {
             "origem" : "Requisições Contagem",
             "quantidade" : num_req_count
-        }
+        },
+        {
+            "origem" : "Requisições Contagem 2",
+            'quantidade' : num2_req_count
+         }
     ]
     return {"req_list" : req_List, "IP_req" : calls_by_IP}
