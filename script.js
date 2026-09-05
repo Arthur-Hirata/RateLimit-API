@@ -92,3 +92,21 @@ function secondRoute(){
         contagem.textContent = data.num
     })
 }
+function thirdRoute(){
+    fetch("http://127.0.0.1:8000/increaseCount2", {
+        method : 'GET'
+    })
+    .then(async response =>{
+        if (response.status === 429){
+            const data = await response.json().catch(() => ({}));
+            window.location.href = "429.html"
+            return;
+        }
+        if (!response.ok) {
+            throw new Error("erro servidor");
+        }
+        const data = await response.json();
+        const contagem = document.getElementById("contagem2")
+        contagem.textContent = data.num
+    })
+}
